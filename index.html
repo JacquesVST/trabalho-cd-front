@@ -1,12 +1,148 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
+    <title>Trabalho Computação Distribuída</title>
 </head>
+
 <body>
-    hello world
+    <div class="container">
+        <div class="row">
+            <div class="col-6">
+                <h1 class="mt-3 mb-3">Gerador de números aleatórios</h1>
+                <form onsubmit="requestNumbers(event)">
+
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="input-group mb-1 mt-1">
+                                <span class="input-group-text">Mínimo</span>
+                                <input type="number" class="form-control" id="min">
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="input-group mb-1 mt-1">
+                                <span class="input-group-text">Máximo</span>
+                                <input type="number" class="form-control" id="max">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-7">
+                            <div class="input-group mb-1 mt-1">
+                                <span class="input-group-text">Quantidade</span>
+                                <input type="number" class="form-control" id="amountNumbers" value="1" min="1">
+                            </div>
+
+                        </div>
+                        <div class="col-5">
+                            <div class="input-group mb-1 mt-1">
+                                <span class="input-group-text">Casas decimais</span>
+                                <input type="number" class="form-control" id="decimalPlaces" value="0" max="10" min="0">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-8">
+                            <div class="input-group mb-1 mt-1">
+                                <span class="input-group-text">Ordenação</span>
+                                <select class="form-select" id="sortDirectionNumbers">
+                                    <option value="0" selected>Sem ordenação</option>
+                                    <option value="1">Crescente</option>
+                                    <option value="-1">Decrescente</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="input-group mb-1 mt-1">
+                                <div class="input-group-text">
+                                    <input class="form-check-input mt-0" type="checkbox" id="canBeZero">
+                                </div>
+                                <input type="text" class="form-control text-center" readonly value="Incluir Zero">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="d-grid">
+                        <input type="submit" class="btn btn-success mb-1 mt-1" value="Gerar">
+                    </div>
+                </form>
+            </div>
+            <div class="col-6">
+                <h1 class="mt-3 mb-3">Sorteador de palavras aleatórias</h1>
+                <form onsubmit="requestWords(event)">
+
+                </form>
+            </div>
+        </div>
+    </div>
+
 </body>
+<script>
+    document.getElementById('canBeZero').checked = true;
+    let requestURL = "http://0.0.0.0:8080/";
+
+    function getNumberParams() {
+        let range = {
+            min: parseInt(document.getElementById('min').value, 10) || -Infinity,
+            max: parseInt(document.getElementById('min').value, 10) || Infinity,
+            decimalPlaces: parseInt(document.getElementById('decimalPlaces').value, 10) || 0,
+            canBeZero: document.getElementById('canBeZero').checked
+        }
+
+        let form = {
+            range: range,
+            amount: parseInt(document.getElementById('amountNumbers').value, 10) || 1,
+            sortDirection: parseInt(document.getElementById('sortDirectionNumbers').value, 10),
+        }
+
+        console.log(form)
+        return form;
+    }
+
+    function getWordParams() {
+
+        let form = {
+            words: words,
+            amount: parseInt(document.getElementById('amountWords').value, 10) || 1,
+            sortDirection: parseInt(document.getElementById('sortDirectionWords').value, 10),
+        }
+
+        console.log(form)
+        return form;
+    }
+
+    function exibirDados(dados) { }
+
+    function requestNumbers(event) {
+        event.preventDefault();
+        let rq = new XMLHttpRequest();
+
+        rq.open("POST", requestURL + 'numbers', false);
+        rq.setRequestHeader("Content-type", "application/json");
+        rq.send(JSON.stringify(getNumberParams()));
+
+        console.log(JSON.parse(rq.response));
+        exibirDados(rq.response);
+    }
+
+    function requestWords(event) {
+        event.preventDefault();
+        let rq = new XMLHttpRequest();
+
+        rq.open("POST", requestURL + 'words', false);
+        rq.setRequestHeader("Content-type", "application/json");
+        rq.send(JSON.stringify(getWordParams()));
+
+        console.log(JSON.parse(rq.response));
+        exibirDados(rq.response);
+    }
+
+</script>
+
 </html>
