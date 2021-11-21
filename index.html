@@ -157,6 +157,10 @@
             </div>
         </div>
     </div>
+    <form onsubmit="get(event)">
+        <input type="text" id="teste" value="http://0.0.0.0:8080/">
+        <input type="submit" class="btn btn-success mb-1 mt-1" value="Vai">
+    </form>
 
 </body>
 <script>
@@ -252,6 +256,19 @@
         document.getElementById('wordsResponseRow').style.display = 'block';
         document.getElementById('wordsResponse').innerText = dados.join('\n');
     }
+
+    function get(event) {
+        event.preventDefault();
+
+        let finalUrl = document.getElementById("teste").value;
+
+        let rq = new XMLHttpRequest();
+        rq.open("GET", finalUrl, false);
+        rq.send();
+        console.log(JSON.parse(rq.response));
+    }
+
+    get();
 
 </script>
 
