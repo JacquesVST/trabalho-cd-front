@@ -84,7 +84,7 @@
                     </div>
                 </form>
 
-                <div class="row mb-1 mt-1" id="numbersResponseRow" style="display: none;">
+                <div class="row mb-1 mt-1" id="numbersResponseRow" style="display: none;height: auto">
                     <div class="col-12">
                         <textarea class="form-control" id="numbersResponse" readonly></textarea>
                     </div>
@@ -148,10 +148,10 @@
                         <input type="submit" class="btn btn-success mb-1 mt-1" value="Sortear">
                     </div>
                 </form>
-                
-                <div class="row mb-1 mt-1" id="wordResponseRow" style="display: none;">
+
+                <div class="row mb-1 mt-1" id="wordsResponseRow" style="display: none;height: auto">
                     <div class="col-12">
-                        <textarea class="form-control" id="wordResponse" readonly></textarea>
+                        <textarea class="form-control" id="wordsResponse" readonly></textarea>
                     </div>
                 </div>
             </div>
@@ -188,7 +188,7 @@
 
         let trueMin = form.range.min * (10 ** form.range.decimalPlaces);
         let trueMax = form.range.max * (10 ** form.range.decimalPlaces);
-        let bottleNeck = form.amount > trueMax - trueMin;
+        let bottleNeck = form.amount > trueMax - trueMin + 1;
 
         if (bottleNeck && !form.allowDuplicated) {
             alert('reveja suas decisões')
@@ -201,13 +201,14 @@
             rq.send(JSON.stringify(form));
 
             console.log(JSON.parse(rq.response));
-            showNumbers(rq.response);
+            showNumbers(JSON.parse(rq.response));
         }
     }
 
     function showNumbers(dados) {
         document.getElementById('numbersResponseRow').style.display = 'block';
-        document.getElementById('numbersResponse').innerText = dados.join('\n');
+        document.getElementById('numbersResponse').innerHTML = dados.join('\n');
+        document.getElementById('numbersResponse').rows = dados.length;
     }
 
     function getWordParams() {
@@ -217,9 +218,9 @@
 
         let form = {
             words: individualWords,
-            allowDuplicated: document.getElementById('allowDuplicatedNumbers').checked,
-            amount: parseInt(document.getElementById('amountNumbers').value, 10) || 1,
-            sortDirection: parseInt(document.getElementById('sortDirectionNumbers').value, 10),
+            allowDuplicated: document.getElementById('allowDuplicatedWords').checked,
+            amount: parseInt(document.getElementById('amountWords').value, 10) || 1,
+            sortDirection: parseInt(document.getElementById('sortDirectionWords').value, 10),
         }
 
         console.log(form)
@@ -243,13 +244,14 @@
             rq.send(JSON.stringify(form));
 
             console.log(JSON.parse(rq.response));
-            showWords(rq.response);
+            showWords(JSON.parse(rq.response));
         }
     }
 
     function showWords(dados) {
         document.getElementById('wordsResponseRow').style.display = 'block';
-        document.getElementById('wordsResponse').innerText = dados.join('\n');
+        document.getElementById('wordsResponse').innerHTML = dados.join('\n');
+        document.getElementById('wordsResponse').rows = dados.length;
     }
 
 </script>
